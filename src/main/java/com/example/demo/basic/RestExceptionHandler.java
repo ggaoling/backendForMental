@@ -18,7 +18,16 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Result handleResourceNotFoundException(NotFoundException e){
         logger.error(e.getMessage(),e);
-        return new Result(e.getMessage(),e.getCode());
+        return new Result(e.getMessage(),e.getCode(),null);
     }
+
+    @ExceptionHandler(value=UpdateFailException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public  Result handleUpDateFailException(UpdateFailException e){
+        return new Result(e.getMessage(),e.getCode(),null);
+    }
+
+
 
 }

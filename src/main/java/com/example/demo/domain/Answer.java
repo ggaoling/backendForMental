@@ -1,20 +1,25 @@
 package com.example.demo.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Answer {
-    private int aid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer aid;
     private int qid;
     private String answer;
     private int qratio;
     private int binding;
 
-    public void setAid(int aid) {
+    public void setAid(Integer aid) {
         this.aid = aid;
     }
 
-    public int getAid() {
+    public Integer getAid() {
         return aid;
     }
 

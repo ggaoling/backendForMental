@@ -1,32 +1,25 @@
 package com.example.demo.domain;
 
-
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class User {
+public class Admin {
     @Id
     private Integer id;
     private String password;
     private String tel;
     private String email;
-    private Integer history;
-    private String currentAuthority="user";
+    private String currentAuthority="admin";
     private String status;
 
-    public User(){
+    public Admin(){
 
     }
-    public User(Integer id, String password, String tel, Integer history, String currentAuthority, String status){
+    public Admin(Integer id, String password, String tel,  String currentAuthority, String status){
         this.id=id;
         this.password=password;
         this.tel=tel;
-        this.history=history;
         this.currentAuthority=currentAuthority;
         this.status=status;
 
@@ -54,14 +47,6 @@ public class User {
         this.tel = tel;
     }
 
-    public Integer getHistory() {
-        return history;
-    }
-
-    public void setHistory(Integer history) {
-        this.history = history;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -84,5 +69,4 @@ public class User {
     public String getCurrentAuthority(){
         return currentAuthority;
     }
-
 }

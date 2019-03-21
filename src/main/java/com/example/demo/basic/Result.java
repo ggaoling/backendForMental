@@ -12,11 +12,14 @@ public class Result
      */
     private int code;
 
+    private Object result;
 
-    public Result(String error, int code)
+
+    public Result(String error, int code,Object result)
     {
         this.error = error;
         this.code = code;
+        this.result=result;
     }
 
     public String getError()
@@ -39,6 +42,13 @@ public class Result
         this.code = code;
     }
 
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
 
     public enum ErrorCode{
         /**
