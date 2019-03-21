@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     public User findById(Integer id) throws NotFoundException {
         User currentUser=userRepository.findUserById(id);
         if(currentUser==null){
-            throw new NotFoundException("user"+id+"is not exist!", Result.ErrorCode.USER_NOT_FOUND.getCode());
+            throw new NotFoundException("user"+id+"is not exist!", Result.ErrorCode.NOT_FOUND.getCode());
         }
         return currentUser;
     }

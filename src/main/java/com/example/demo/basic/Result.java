@@ -52,14 +52,19 @@ public class Result
 
     public enum ErrorCode{
         /**
-         * 用户不存在
+         * 不存在
          */
-        USER_NOT_FOUND(40401),
+        NOT_FOUND(40401),
 
         /**
-         * 用户已存在
+         * 已存在
          */
-        USER_ALREADY_EXIST(40001),
+        ALREADY_EXIST(40001),
+
+        /**
+         * update fail
+         */
+        UPDATE_FAIL(40002);
         ;
 
         private int code;

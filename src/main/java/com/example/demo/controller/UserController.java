@@ -15,9 +15,9 @@ import static com.example.demo.util.MD5.getMD5;
 @RestController
 public class UserController {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @RequestMapping(value="/logon")
     public Object login(@RequestBody HashMap<String, String> map){
@@ -42,6 +42,11 @@ public class UserController {
         return current;
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "user/updateUserInfo")
     public Object updateUserInfo(@RequestBody User user){
             userRepository.save(user);

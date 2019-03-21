@@ -10,6 +10,5 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 //    User findUserById(@Param("id") Integer id);
 
     User findUserById(Integer id);
-    Boolean updateUserInfo(User user);
 
 }
