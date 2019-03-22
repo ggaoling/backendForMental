@@ -8,6 +8,10 @@ public class Select {
     @Id
     private Integer qid;
 
+    public Select(Integer id){
+        this.qid=id;
+    }
+
     public void setQid(Integer qid) {
         this.qid = qid;
     }

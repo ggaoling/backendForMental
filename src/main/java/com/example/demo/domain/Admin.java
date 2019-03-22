@@ -2,22 +2,25 @@ package com.example.demo.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class Admin {
     @Id
-    private Integer id;
+    private Integer uid;
     private String password;
     private String tel;
     private String email;
+    @Transient
     private String currentAuthority="admin";
+    @Transient
     private String status;
 
     public Admin(){
 
     }
     public Admin(Integer id, String password, String tel,  String currentAuthority, String status){
-        this.id=id;
+        this.uid=id;
         this.password=password;
         this.tel=tel;
         this.currentAuthority=currentAuthority;
@@ -26,10 +29,10 @@ public class Admin {
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.uid = id;
     }
     public Integer getId(){
-        return id;
+        return uid;
     }
 
     public String getPassword() {
@@ -47,6 +50,7 @@ public class Admin {
         this.tel = tel;
     }
 
+    @Transient
     public String getStatus() {
         return status;
     }
@@ -66,6 +70,7 @@ public class Admin {
     public void setCurrentAuthority(String currentAuthority) {
         this.currentAuthority = currentAuthority;
     }
+    @Transient
     public String getCurrentAuthority(){
         return currentAuthority;
     }

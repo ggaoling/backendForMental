@@ -3,8 +3,10 @@ package com.example.demo.controller;
 import com.example.demo.basic.NotFoundException;
 import com.example.demo.basic.Result;
 import com.example.demo.basic.UpdateFailException;
+import com.example.demo.domain.Answer;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Select;
+import com.example.demo.repository.QuestionRepository;
 import com.example.demo.repository.SelectRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
@@ -23,6 +25,9 @@ public class QuestionController {
     private AnswerService answerService;
     @Autowired
     private SelectRepository selectRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+
 
     @RequestMapping(value = "/addQuestion")
     public Object addQuestion(@RequestBody Question question)throws UpdateFailException {
@@ -47,18 +52,9 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value = "selectQuestions")
-    public Object selectQuestions(@RequestBody List<Select> qidList)throws UpdateFailException{
-        for(Select item:qidList){
-            Select select=selectRepository.save(item);
-            if(select==null){
-                throw new UpdateFailException("插入select表失败", Result.ErrorCode.UPDATE_FAIL.getCode());
-            }
+    public Result selectQuestions(@RequestBody List<Select> qidList)throws UpdateFailException{
 
-        }
-        return new Result("success",200,null);
+        return questionService.selectQuestions(qidList);
     }
-
-
-
 
 }

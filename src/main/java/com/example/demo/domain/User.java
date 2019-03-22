@@ -3,27 +3,26 @@ package com.example.demo.domain;
 
 import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class User {
+public class User extends Admin{
     @Id
-    private Integer id;
+    private Integer uid;
     private String password;
     private String tel;
     private String email;
     private Integer history;
+    @Transient
     private String currentAuthority="user";
+    @Transient
     private String status;
 
     public User(){
 
     }
     public User(Integer id, String password, String tel, Integer history, String currentAuthority, String status){
-        this.id=id;
+        this.uid=id;
         this.password=password;
         this.tel=tel;
         this.history=history;
@@ -33,10 +32,10 @@ public class User {
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.uid = id;
     }
     public Integer getId(){
-        return id;
+        return uid;
     }
 
     public String getPassword() {
@@ -62,6 +61,7 @@ public class User {
         this.history = history;
     }
 
+    @Transient
     public String getStatus() {
         return status;
     }
@@ -81,6 +81,7 @@ public class User {
     public void setCurrentAuthority(String currentAuthority) {
         this.currentAuthority = currentAuthority;
     }
+    @Transient
     public String getCurrentAuthority(){
         return currentAuthority;
     }

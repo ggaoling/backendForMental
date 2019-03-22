@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.basic.NotFoundException;
+import com.example.demo.basic.Result;
 import com.example.demo.basic.UpdateFailException;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Select;
@@ -30,7 +31,7 @@ public interface QuestionService {
      * @return
      * @throws NotFoundException
      */
-    Object queryQuestionById(Integer id)throws NotFoundException;
+    Object queryQuestionById(Integer id);
 
     /**
      * 根据qid获取question
@@ -38,4 +39,6 @@ public interface QuestionService {
      * @return
      */
     Object getTest(List<Select> qidList)throws NotFoundException;
+
+    Result selectQuestions(List<Select> qidList)throws UpdateFailException;
 }

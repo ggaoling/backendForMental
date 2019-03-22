@@ -15,6 +15,10 @@ public class Result
     private Object result;
 
 
+    public Result(){
+
+    }
+
     public Result(String error, int code,Object result)
     {
         this.error = error;

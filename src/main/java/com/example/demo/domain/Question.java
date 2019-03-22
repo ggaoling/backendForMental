@@ -1,9 +1,6 @@
 package com.example.demo.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -15,6 +12,7 @@ public class Question {
     private int importance;
     private int type;
     private int tag;
+    @Transient
     private List<Answer> answers;
 
     public void setQid(Integer qid) {
@@ -57,6 +55,7 @@ public class Question {
         this.type = type;
     }
 
+    @Transient
     public List<Answer> getAnswers() {
         return answers;
     }

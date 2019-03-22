@@ -6,12 +6,15 @@ import com.example.demo.basic.UpdateFailException;
 import com.example.demo.domain.Answer;
 import com.example.demo.domain.Question;
 import com.example.demo.domain.Select;
+import com.example.demo.repository.AnswerRepository;
 import com.example.demo.repository.QuestionRepository;
+import com.example.demo.repository.SelectRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,31 +23,43 @@ public class QuestionServiceImpl implements QuestionService{
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private AnswerRepository answerRepository;
+    @Autowired
+    private SelectRepository selectRepository;
 
     @Override
-    public Object addQuestion(Question question) throws UpdateFailException{
+    public Result addQuestion(Question question) throws UpdateFailException{
         Question questionUpdate=questionRepository.save(question);
         if(questionUpdate==null){
             throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
         }
         else{
-            return new Result("success",200,null);
+            List<Answer> answers=question.getAnswers();
+            List<Answer> answerUpdate=answerRepository.saveAll(answers);
+            if(answerUpdate==null){
+                throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
+            }
+            else{
+                return new Result("success",200,null);
+            }
         }
     }
 
     @Override
-    public Object queryQuestionById(Integer id) throws NotFoundException{
+    public Object queryQuestionById(Integer id) {
         Question question=questionRepository.findByQid(id);
-        if(question==null){
-            throw new NotFoundException("问题"+id+"不存在",Result.ErrorCode.NOT_FOUND.getCode());
-        }
-        else{
-            return new Result("success",200,question);
-        }
+        return question;
+//        if(question==null){
+//            throw new NotFoundException("问题"+id+"不存在",Result.ErrorCode.NOT_FOUND.getCode());
+//        }
+//        else{
+//            return new Result("success",200,question);
+//        }
     }
 
     @Override
-    public Object queryQuestionsByName(String name) throws NotFoundException{
+    public Result queryQuestionsByName(String name) throws NotFoundException{
         List<Question> questions=questionRepository.findByQuestionLike(name);
         if(questions==null){
             throw new NotFoundException("查找出错",Result.ErrorCode.NOT_FOUND.getCode());
@@ -69,5 +84,26 @@ public class QuestionServiceImpl implements QuestionService{
             }
         }
         return "";
+    }
+
+    @Override
+    public Result selectQuestions(List<Select> qidList)throws UpdateFailException{
+       List<Select> saveResult1=selectRepository.saveAll(qidList);
+       if(saveResult1==null){
+           throw new UpdateFailException("插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
+       }
+        ArrayList<Integer> valueList=new ArrayList<Integer>();
+       for(Select item:qidList){
+           valueList.add(item.getQid());
+           List<Integer> bindingList=answerRepository.findBindingByQid(item.getQid());
+           for(Integer elem:bindingList){
+               Select toSave=new Select(elem);
+               Select saveResult2=selectRepository.save(toSave);
+               if(saveResult2==null){
+                   throw new UpdateFailException("bingding插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
+               }
+           }
+       }
+        return new Result("success",200,null);
     }
 }

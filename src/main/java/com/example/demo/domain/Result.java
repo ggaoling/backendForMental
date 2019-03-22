@@ -3,7 +3,6 @@ package com.example.demo.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
 public class Result {
     @Id
     private Integer id;
