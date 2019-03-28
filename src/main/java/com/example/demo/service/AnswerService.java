@@ -14,7 +14,7 @@ public interface AnswerService {
      * @throws UpdateFailException
      * 新增答案
      */
-    Object addAnswer(Answer answer) throws UpdateFailException;
+    Object addAnswer(Answer answer);
 
     /**
      * 根据qid查找answers

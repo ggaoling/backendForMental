@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.HashMap;
 import java.util.List;
 
-@RequestMapping(value = "/question")
+//@RequestMapping(value = "/question")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -29,8 +29,8 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
 
-    @RequestMapping(value = "/addQuestion")
-    public Object addQuestion(@RequestBody Question question)throws UpdateFailException {
+    @RequestMapping(value = "/question/addQuestion")
+    public Object addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }
 
@@ -51,7 +51,7 @@ public class QuestionController {
      * @param qidList [{qid:value},]
      * @return
      */
-    @RequestMapping(value = "selectQuestions")
+    @RequestMapping(value = "/selectQuestions")
     public Result selectQuestions(@RequestBody List<Select> qidList)throws UpdateFailException{
 
         return questionService.selectQuestions(qidList);

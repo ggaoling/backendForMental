@@ -27,60 +27,48 @@ public class UserController {
     private AdminRepository adminRepository;
 
     @RequestMapping(value="/logon")
-    public Result login(@RequestBody HashMap<String, String> map)throws NotFoundException {
-        Integer id=Integer.valueOf(map.get("id"));
-        String password=getMD5(map.get("password"));
+    public Result login(@RequestBody HashMap<String, String> map){
+        Integer id=Integer.valueOf(map.get("uid"));
+        String password=map.get("password");
         Admin a=userService.findById_a(id);
         Result result=new Result("success",200,null);
         if(a==null){
             User u=userService.findById_u(id);
+            System.out.print(u);
             if(u==null){
                 //uid aid都不匹配
-                throw new NotFoundException("user"+id+"is not exist!", Result.ErrorCode.NOT_FOUND.getCode());
+                result.setError("该用户不存在");
             }
             else if(u.getPassword().equals(password)){
+                u.setStatus("ok");
                     result.setResult(u);
                 }
+
             else{
-                throw new NotFoundException("密码不正确", Result.ErrorCode.NOT_FOUND.getCode());
-//                result=new Result("密码不正确",Result.ErrorCode.NOT_FOUND.getCode(),null);
+                result.setError("密码不正确");
             }
 
         }
         else if(a.getPassword().equals(password)){
+            a.setStatus("ok");
             result.setResult(a);
         }
-        else{
-            throw new NotFoundException("密码不正确", Result.ErrorCode.NOT_FOUND.getCode());
+        else {
+            result.setError("密码不正确");
         }
-
-
-//        if(id.equals("1001")&&password.equals(getMD5("1001"))){
-//            User user=new User();
-//            user.setStatus("ok");
-//            user.setCurrentAuthority("user");
-//            result.setError("success");
-//            result.setCode(200);
-//            result.setResult(user);
-//        }
-//        else{
-//            result.setError("fail");
-//            result.setCode(Result.ErrorCode.NOT_FOUND.getCode());
-//            result.setResult(null);
-//        }
         return result;
     }
 
 
-    @RequestMapping(value="user/queryCurrent")
-    public Result queryCurrent(@RequestBody HashMap<String,String> map)throws NotFoundException {
-        Integer id=Integer.valueOf(map.get("id"));
+    @RequestMapping(value="/user/queryCurrent")
+    public Result queryCurrent(@RequestBody HashMap<String,String> map){
+        Integer id=Integer.valueOf(map.get("uid"));
         Result result=new Result("success",200,null);
         Admin a=userService.findById_a(id);
         if(a==null){
             User u=userService.findById_u(id);
             if(u==null){
-                throw new NotFoundException("查询当前用户信息错误", Result.ErrorCode.NOT_FOUND.getCode());
+                result.setError("查询当前用户信息错误");
             }
             else{
                 result.setResult(u);
@@ -97,18 +85,19 @@ public class UserController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "user/updateUserInfo")
-    public Result updateUserInfo(@RequestBody HashMap<String,String> user)throws UpdateFailException{
-        Integer id=Integer.valueOf(user.get("uid"));
+    @RequestMapping(value = "/user/updateUserInfo")
+    public Result updateUserInfo(@RequestBody HashMap<String,String> user){
+        Integer id=Integer.valueOf(user.get("id"));
         String tel=user.get("tel");
         String email=user.get("email");
         User u=userService.findById_u(id);
+        Result result=new Result("success",200,null);
         if(u!=null){
             u.setTel(tel);
             u.setEmail(email);
             User userUpdate=userRepository.save(u);
             if(userUpdate==null){
-                throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
+                result.setError("更新失败");
             }
         }
         else{
@@ -117,25 +106,22 @@ public class UserController {
             a.setTel(tel);
             Admin adminUpdate=adminRepository.save(a);
             if(adminUpdate==null){
-                throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
+                result.setError("更新失败");
             }
         }
-        Result result=new Result("success",200,null);
         return result;
     }
 
-    @RequestMapping(value = "user/queryAllUsers")
-    public Result queryAllUsers() throws NotFoundException{
+    @RequestMapping(value = "/user/queryAllUsers")
+    public Result queryAllUsers(){
          List<User> userList=userRepository.findAll();
          Result result=new Result("success", 200,null);
          if(userList==null){
-             throw new NotFoundException("查询用户出错", Result.ErrorCode.NOT_FOUND.getCode());
+             result.setError("查询用户出错");
          }
          else{
              result.setResult(userList);
          }
          return result;
     }
-
-
 }

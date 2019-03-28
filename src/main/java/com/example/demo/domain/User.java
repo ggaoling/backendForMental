@@ -6,9 +6,11 @@ import org.hibernate.validator.constraints.UniqueElements;
 import javax.persistence.*;
 
 @Entity
-public class User extends Admin{
+@Table(name = "user")
+public class User {
     @Id
     private Integer uid;
+    private String name;
     private String password;
     private String tel;
     private String email;
@@ -21,8 +23,9 @@ public class User extends Admin{
     public User(){
 
     }
-    public User(Integer id, String password, String tel, Integer history, String currentAuthority, String status){
+    public User(Integer id, String name,String password, String tel, Integer history, String currentAuthority, String status){
         this.uid=id;
+        this.name=name;
         this.password=password;
         this.tel=tel;
         this.history=history;
@@ -36,6 +39,13 @@ public class User extends Admin{
     }
     public Integer getId(){
         return uid;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {

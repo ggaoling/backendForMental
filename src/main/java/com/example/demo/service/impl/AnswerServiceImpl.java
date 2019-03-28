@@ -18,14 +18,13 @@ public class AnswerServiceImpl implements AnswerService {
     private AnswerRepository answerRepository;
 
     @Override
-    public Object addAnswer(Answer answer) throws UpdateFailException {
+    public Object addAnswer(Answer answer) {
         Answer answer1=answerRepository.save(answer);
+        Result result=new Result("success",200,null);
         if(answer1==null){
-            throw new UpdateFailException("新增失败", Result.ErrorCode.UPDATE_FAIL.getCode());
+            result.setError("新增失败");
         }
-        else{
-            return new Result("success",200,null);
-        }
+        return result;
     }
 
     @Override

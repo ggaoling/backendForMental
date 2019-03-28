@@ -1,15 +1,17 @@
-package com.example.demo.basic;
+package com.example.demo;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class WebmVCConfig extends WebMvcConfigurerAdapter {
+@EnableWebMvc
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry){
-        registry.addMapping("/**")
+        registry.addMapping("/controller/**")
                 .allowedOrigins("*")
                 .allowCredentials(true)
                 .allowedMethods("POST","GET","PUT")
@@ -17,3 +19,4 @@ public class WebmVCConfig extends WebMvcConfigurerAdapter {
 
     }
 }
+

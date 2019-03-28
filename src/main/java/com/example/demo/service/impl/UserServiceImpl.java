@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById_u(Integer id) {
         User currentUser_u=userRepository.findByUid(id);
-
         if(currentUser_u!=null){
             return currentUser_u;
         }
@@ -38,9 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Admin findById_a(Integer id){
-        Admin currenUser_a=adminRepository.findByUid(id);
-         if(currenUser_a!=null){
-            return currenUser_a;
+        Admin currentUser_a=adminRepository.findByUid(id);
+         if(currentUser_a!=null){
+            return currentUser_a;
         }
         else{
             return null;

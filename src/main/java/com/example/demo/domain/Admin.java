@@ -2,12 +2,15 @@ package com.example.demo.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
+@Table(name = "admin")
 public class Admin {
     @Id
     private Integer uid;
+    private String name;
     private String password;
     private String tel;
     private String email;
@@ -19,8 +22,9 @@ public class Admin {
     public Admin(){
 
     }
-    public Admin(Integer id, String password, String tel,  String currentAuthority, String status){
+    public Admin(Integer id, String name,String password, String tel,  String currentAuthority, String status){
         this.uid=id;
+        this.name=name;
         this.password=password;
         this.tel=tel;
         this.currentAuthority=currentAuthority;
@@ -33,6 +37,14 @@ public class Admin {
     }
     public Integer getId(){
         return uid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

@@ -29,21 +29,22 @@ public class QuestionServiceImpl implements QuestionService{
     private SelectRepository selectRepository;
 
     @Override
-    public Result addQuestion(Question question) throws UpdateFailException{
+    public Result addQuestion(Question question) {
         Question questionUpdate=questionRepository.save(question);
+        Result result=new Result("success",200,null);
         if(questionUpdate==null){
-            throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
+            result.setError("更新失败");
+//            throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
         }
         else{
             List<Answer> answers=question.getAnswers();
             List<Answer> answerUpdate=answerRepository.saveAll(answers);
             if(answerUpdate==null){
-                throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
-            }
-            else{
-                return new Result("success",200,null);
+                result.setError("更新失败");
+//                throw new UpdateFailException("更新失败", Result.ErrorCode.UPDATE_FAIL.getCode());
             }
         }
+        return result;
     }
 
     @Override
@@ -59,18 +60,17 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Result queryQuestionsByName(String name) throws NotFoundException{
+    public Result queryQuestionsByName(String name) {
         List<Question> questions=questionRepository.findByQuestionLike(name);
+        Result result=new Result("success",200,questions);
         if(questions==null){
-            throw new NotFoundException("查找出错",Result.ErrorCode.NOT_FOUND.getCode());
+            result.setError("查找出错");
         }
-        else{
-            return new Result("success",200,questions);
-        }
+            return result;
     }
 
     @Override
-    public Object getTest(List<Select> qidList)throws NotFoundException{
+    public Object getTest(List<Select> qidList){
         for(Select item:qidList){
             Integer qid=Integer.valueOf(item.getQid());
             //找question表
@@ -87,10 +87,12 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Result selectQuestions(List<Select> qidList)throws UpdateFailException{
+    public Result selectQuestions(List<Select> qidList){
        List<Select> saveResult1=selectRepository.saveAll(qidList);
+       Result result=new Result("success",200,null);
        if(saveResult1==null){
-           throw new UpdateFailException("插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
+           result.setError("插入select出错");
+//           throw new UpdateFailException("插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
        }
         ArrayList<Integer> valueList=new ArrayList<Integer>();
        for(Select item:qidList){
@@ -100,10 +102,11 @@ public class QuestionServiceImpl implements QuestionService{
                Select toSave=new Select(elem);
                Select saveResult2=selectRepository.save(toSave);
                if(saveResult2==null){
-                   throw new UpdateFailException("bingding插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
+                   result.setError("bingding插入select出错");
+//                   throw new UpdateFailException("bingding插入select出错",Result.ErrorCode.NOT_FOUND.getCode());
                }
            }
        }
-        return new Result("success",200,null);
+        return result;
     }
 }
