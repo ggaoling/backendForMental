@@ -30,7 +30,7 @@ public class QuestionController {
 
 
     @RequestMapping(value = "/question/addQuestion")
-    public Object addQuestion(@RequestBody Question question){
+    public Result addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }
 
@@ -38,10 +38,9 @@ public class QuestionController {
      *
      * @param map {questionName:value}
      * @return
-     * @throws NotFoundException
      */
     @RequestMapping(value = "/queryQuestionsByName")
-    public Object queryQuestionsByName(@RequestBody HashMap<String,String>map) throws NotFoundException{
+    public Result queryQuestionsByName(@RequestBody HashMap<String,String>map){
         String name=map.get("questionName");
         return questionService.queryQuestionsByName(name);
     }
@@ -52,9 +51,23 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value = "/selectQuestions")
-    public Result selectQuestions(@RequestBody List<Select> qidList)throws UpdateFailException{
+    public Result selectQuestions(@RequestBody List<Select> qidList){
 
         return questionService.selectQuestions(qidList);
+    }
+
+    @RequestMapping(value = "/queryQuestionByQid")
+    public Result queryQuestionByQid(@RequestBody HashMap<String,String>request){
+        Integer qid=Integer.valueOf(request.get("qid"));
+        Question question=questionService.queryQuestionById(qid);
+        Result result=new Result("success",200,null);
+        if(question==null){
+            result.setError("该id对应问题不存在");
+        }
+        else{
+            result.setResult(question);
+        }
+        return result;
     }
 
 }

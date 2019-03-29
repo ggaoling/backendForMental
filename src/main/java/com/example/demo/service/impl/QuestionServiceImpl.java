@@ -48,7 +48,7 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Object queryQuestionById(Integer id) {
+    public Question queryQuestionById(Integer id) {
         Question question=questionRepository.findByQid(id);
         return question;
 //        if(question==null){
@@ -70,7 +70,8 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Object getTest(List<Select> qidList){
+    public Result getTest(List<Select> qidList){
+        Result result=new Result("success",200,null);
         for(Select item:qidList){
             Integer qid=Integer.valueOf(item.getQid());
             //找question表
@@ -83,7 +84,7 @@ public class QuestionServiceImpl implements QuestionService{
                 Question bindingQuestion=questionRepository.findByQid(qid);
             }
         }
-        return "";
+        return result;
     }
 
     @Override

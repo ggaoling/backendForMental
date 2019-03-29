@@ -15,7 +15,7 @@ public interface QuestionService {
      * @return
      * @throws UpdateFailException
      */
-    Object addQuestion(Question question) ;
+    Result addQuestion(Question question) ;
 
     /**
      * 根据名字模糊查询问题列表
@@ -23,7 +23,7 @@ public interface QuestionService {
      * @return
      * @throws NotFoundException
      */
-    Object queryQuestionsByName(String name);
+    Result queryQuestionsByName(String name);
 
     /**
      * 根据qid查问题
@@ -31,14 +31,14 @@ public interface QuestionService {
      * @return
      * @throws NotFoundException
      */
-    Object queryQuestionById(Integer id);
+    Question queryQuestionById(Integer id);
 
     /**
      * 根据qid获取question
      * @param qidList
      * @return
      */
-    Object getTest(List<Select> qidList);
+    Result getTest(List<Select> qidList);
 
     Result selectQuestions(List<Select> qidList);
 }
