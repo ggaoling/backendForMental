@@ -5,14 +5,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "select")
-public class Select {
+@Table(name="selected")
+public class Selected {
     @Id
     private Integer qid;
 
-    public Select(){}
-    public Select(Integer id){
-        this.qid=id;
+    public Selected(){
+
+    }
+    public Selected(Integer qid){
+        this.qid=qid;
     }
 
     public void setQid(Integer qid) {

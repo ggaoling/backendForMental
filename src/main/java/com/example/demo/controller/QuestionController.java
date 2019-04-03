@@ -1,32 +1,38 @@
 package com.example.demo.controller;
 
-import com.example.demo.basic.NotFoundException;
 import com.example.demo.basic.Result;
-import com.example.demo.basic.UpdateFailException;
 import com.example.demo.domain.Answer;
 import com.example.demo.domain.Question;
-import com.example.demo.domain.Select;
+import com.example.demo.domain.Selected;
+import com.example.demo.repository.AnswerRepository;
 import com.example.demo.repository.QuestionRepository;
-import com.example.demo.repository.SelectRepository;
+import com.example.demo.repository.SelectedRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
 
 //@RequestMapping(value = "/question")
+@RestController
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
     private AnswerService answerService;
     @Autowired
-    private SelectRepository selectRepository;
+    private SelectedRepository selectedRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
 
 
     @RequestMapping(value = "/question/addQuestion")
@@ -34,29 +40,39 @@ public class QuestionController {
         return questionService.addQuestion(question);
     }
 
+    @RequestMapping(value="/question/updateQuestion")
+    public Result updataQuestion(@RequestBody Question question){
+        return questionService.updateQuestion(question);
+    }
+
     /**
      *
      * @param map {questionName:value}
      * @return
      */
-    @RequestMapping(value = "/queryQuestionsByName")
+    @RequestMapping(value = "/question/queryQuestionsByName")
     public Result queryQuestionsByName(@RequestBody HashMap<String,String>map){
-        String name=map.get("questionName");
-        return questionService.queryQuestionsByName(name);
+        String question=map.get("questionName");
+        Integer pageNo=Integer.valueOf(map.get("pageNo"));
+        Sort sort=new Sort(Sort.Direction.ASC, "qid");
+        Pageable pagination=new PageRequest(pageNo,10,sort);
+        return questionService.queryQuestionsByName(question,pagination);
     }
 
     /**
      *
-     * @param qidList [{qid:value},]
+     * @param request {selectList:[{qid:value},]}
      * @return
      */
-    @RequestMapping(value = "/selectQuestions")
-    public Result selectQuestions(@RequestBody List<Select> qidList){
-
+    @RequestMapping(value = "/question/selectQuestions")
+    public Result selectQuestions(@RequestBody HashMap<String,List<Selected>> request){
+        List<Selected> qidList=request.get("selectList");
+//        Selected temp=new Selected(10);
+//       selectedRepository.save(temp);
         return questionService.selectQuestions(qidList);
     }
 
-    @RequestMapping(value = "/queryQuestionByQid")
+    @RequestMapping(value = "/question/queryQuestionByQid")
     public Result queryQuestionByQid(@RequestBody HashMap<String,String>request){
         Integer qid=Integer.valueOf(request.get("qid"));
         Question question=questionService.queryQuestionById(qid);
@@ -65,6 +81,8 @@ public class QuestionController {
             result.setError("该id对应问题不存在");
         }
         else{
+            List<Answer> answers=answerRepository.findByQid(qid);
+            question.setAnswers(answers);
             result.setResult(question);
         }
         return result;

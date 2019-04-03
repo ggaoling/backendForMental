@@ -4,7 +4,8 @@ import com.example.demo.basic.NotFoundException;
 import com.example.demo.basic.Result;
 import com.example.demo.basic.UpdateFailException;
 import com.example.demo.domain.Question;
-import com.example.demo.domain.Select;
+import com.example.demo.domain.Selected;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,11 +20,11 @@ public interface QuestionService {
 
     /**
      * 根据名字模糊查询问题列表
-     * @param name
+     * @param question
      * @return
      * @throws NotFoundException
      */
-    Result queryQuestionsByName(String name);
+    Result queryQuestionsByName(String question, Pageable pagination);
 
     /**
      * 根据qid查问题
@@ -38,7 +39,8 @@ public interface QuestionService {
      * @param qidList
      * @return
      */
-    Result getTest(List<Select> qidList);
+    Result getTest(List<Selected> qidList);
 
-    Result selectQuestions(List<Select> qidList);
+    Result updateQuestion(Question question);
+    Result selectQuestions(List<Selected> qidList);
 }

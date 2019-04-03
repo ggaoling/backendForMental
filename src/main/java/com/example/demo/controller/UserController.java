@@ -9,6 +9,10 @@ import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -113,8 +117,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/queryAllUsers")
-    public Result queryAllUsers(){
-         List<User> userList=userRepository.findAll();
+    public Result queryAllUsers(@RequestBody HashMap<String,Integer> map){
+        Integer pageNo=map.get("pageNo");
+        Integer pageSize=map.get("pageSize");
+        Sort sort=new Sort(Sort.Direction.ASC, "uid");
+        Pageable pageable=new PageRequest(pageNo,pageSize,sort);
+         Page<User> userList=userRepository.findAll(pageable);
+         System.out.print(userList);
          Result result=new Result("success", 200,null);
          if(userList==null){
              result.setError("查询用户出错");
