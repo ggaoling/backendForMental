@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface AnswerRepository extends JpaRepository<Answer,Integer> {
     List<Answer> findByQid(Integer id);
+    Answer findByAid(Integer aid);
 
     @Query("select binding from Answer a where a.qid in ?1")
     List<Integer> findBindingListByQid(List<Integer> qidList);

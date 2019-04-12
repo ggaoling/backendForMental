@@ -49,6 +49,8 @@ public class QuestionServiceImpl implements QuestionService{
                     Question next=questionRepository.findByQid(binding);
                     if(next==null){
                         result.setError("绑定的问题不存在，请重新确认");
+                        questionRepository.deleteById(qid);
+
                         return result;
                     }
                     int tag=next.getTag();
@@ -94,19 +96,52 @@ public class QuestionServiceImpl implements QuestionService{
     @Override
     public Result getTest(List<Selected> qidList){
         Result result=new Result("success",200,null);
+        List<Question> questionList=new ArrayList<>();
         for(Selected item:qidList){
             Integer qid=Integer.valueOf(item.getQid());
             //找question表
             Question question=questionRepository.findByQid(qid);
             //找对应的answers
             List<Answer> answers=answerService.queryAnswers(qid);
-            //便利answers找binding
-            for(Answer elem:answers){
-                Integer tempId=elem.getBinding();
-                Question bindingQuestion=questionRepository.findByQid(qid);
+            question.setAnswers(answers);
+            questionList.add(question);
+        }
+        result.setResult(sortQuestionList(questionList));
+        return result;
+    }
+
+    private List<Question> sortQuestionList(List<Question> questionList){
+        List<Question> list=new ArrayList<>();
+        Integer tag1Length=0;
+        Integer tag3Length=0;//最后的位置
+        Integer random=0;
+        Integer pre0Length=0;
+        for(Question item:questionList){
+            Integer tag=item.getTag();
+            switch (tag){
+                case 1:
+                    list.add(0,item);
+                    tag1Length+=1;
+                break;
+                case 2:
+                    list.add(list.size(),item);
+                    break;
+                case 3:
+                    list.add(tag1Length+pre0Length,item);
+                    tag3Length+=1;
+                    break;
+                case 0:
+                    if(random%2==0){
+                        list.add(tag1Length,item);
+                        pre0Length+=1;
+                    }
+                    else{
+                        list.add(tag1Length+pre0Length+tag3Length,item);
+                    }
+                    random+=1;
             }
         }
-        return result;
+        return list;
     }
     @Override
     public Result updateQuestion(Question q){
@@ -196,6 +231,7 @@ public class QuestionServiceImpl implements QuestionService{
        }
         return result;
     }
+
 
     private List<Integer> findBinding(Integer qid){
         List<Integer> bindingList=answerRepository.findBindingByQid(qid);

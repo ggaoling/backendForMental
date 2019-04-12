@@ -10,6 +10,7 @@ import com.example.demo.repository.SelectedRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,19 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 
-//@RequestMapping(value = "/question")
 @RestController
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private AnswerService answerService;
-    @Autowired
-    private SelectedRepository selectedRepository;
+    private AnswerRepository answerRepository;
     @Autowired
     private QuestionRepository questionRepository;
-    @Autowired
-    private AnswerRepository answerRepository;
 
 
     @RequestMapping(value = "/question/addQuestion")
@@ -67,8 +63,6 @@ public class QuestionController {
     @RequestMapping(value = "/question/selectQuestions")
     public Result selectQuestions(@RequestBody HashMap<String,List<Selected>> request){
         List<Selected> qidList=request.get("selectList");
-//        Selected temp=new Selected(10);
-//       selectedRepository.save(temp);
         return questionService.selectQuestions(qidList);
     }
 
@@ -85,6 +79,18 @@ public class QuestionController {
             question.setAnswers(answers);
             result.setResult(question);
         }
+        return result;
+    }
+
+    @RequestMapping(value = "/question/querySelected")
+    public Result querySelected(@RequestBody HashMap<String,Integer> map){
+        Integer pageNo=map.get("pageNo");
+        Integer pageSize=map.get("pageSize");
+        Sort sort=new Sort(Sort.Direction.ASC, "qid");
+        Pageable pageable=new PageRequest(pageNo,pageSize,sort);
+        Page<Question> questionList=questionRepository.querySelected(pageable);
+        Result result=new Result("success",200,null);
+        result.setResult((questionList));
         return result;
     }
 

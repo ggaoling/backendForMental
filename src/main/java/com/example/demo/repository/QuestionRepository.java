@@ -11,8 +11,9 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question,Integer>,PagingAndSortingRepository<Question,Integer> {
     Question findByQid(Integer id);
-
-
    Page<Question> findAllByQuestionLike(String question, Pageable pageable);
+
+   @Query("select q from Question q,Selected s where q.qid=s.qid")
+   Page<Question> querySelected(Pageable pageable);
 
 }
