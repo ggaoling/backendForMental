@@ -4,10 +4,19 @@ import java.util.List;
 
 public class ResultRequest {
     private Integer uid;
+    private Integer sid;
     private List<TestResult> resultList;
 
     public Integer getUid() {
         return uid;
+    }
+
+    public Integer getSid() {
+        return sid;
+    }
+
+    public void setSid(Integer sid) {
+        this.sid = sid;
     }
 
     public void setUid(Integer uid) {

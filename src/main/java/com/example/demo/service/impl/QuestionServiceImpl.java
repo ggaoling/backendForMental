@@ -1,18 +1,18 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.basic.Result;
-import com.example.demo.domain.Answer;
-import com.example.demo.domain.Question;
-import com.example.demo.domain.Selected;
+import com.example.demo.domain.*;
 import com.example.demo.repository.AnswerRepository;
 import com.example.demo.repository.QuestionRepository;
 import com.example.demo.repository.SelectedRepository;
+import com.example.demo.repository.SeriesRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,8 @@ public class QuestionServiceImpl implements QuestionService{
     private AnswerRepository answerRepository;
     @Autowired
     private SelectedRepository selectedRepository;
+    @Autowired
+    private SeriesRepository seriesRepository;
 
     @Override
     public Result addQuestion(Question question) {
@@ -208,27 +210,46 @@ public class QuestionServiceImpl implements QuestionService{
 
     }
 
+    //自定义目前写死11
     @Override
-    public Result selectQuestions(List<Selected> qidList){
-        selectedRepository.deleteAll();
-       List<Selected> saveResult1=selectedRepository.saveAll(qidList);
-       Result result=new Result("success",200,null);
-       if(saveResult1==null){
-           result.setError("插入select出错");
-       }
-       for(Selected item:qidList){
-           List<Integer> valueList=findBinding(item.getQid());
-//           List<Integer> bindingList=answerRepository.findBindingByQid(item.getQid());
-           for(Integer elem:valueList){
-               if(elem!=0){
-                   Selected toSave=new Selected(elem);
-                   Selected saveResult2=selectedRepository.save(toSave);
-                   if(saveResult2==null){
-                       result.setError("bingding插入select出错");
-                   }
-               }
-           }
-       }
+    public Result selectQuestions(SelectSeriesReuqest request){
+        Result result=new Result("success",200,null);
+        Integer sid=Integer.valueOf(request.getSid());
+        List<Selected> qidList=request.getQidList();
+        if(sid==11){
+            selectedRepository.deleteAll();
+            List<Selected> saveResult1=selectedRepository.saveAll(qidList);
+
+            if(saveResult1==null){
+                result.setError("插入select出错");
+            }
+            for(Selected item:qidList){
+                List<Integer> valueList=findBinding(item.getQid());
+                for(Integer elem:valueList){
+                    if(elem!=0){
+                        Selected toSave=new Selected(elem);
+                        Selected saveResult2=selectedRepository.save(toSave);
+                        if(saveResult2==null){
+                            result.setError("bingding插入select出错");
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for(Selected item:qidList){
+                Integer qid=item.getQid();
+                QidNSid qidNSid=new QidNSid();
+                qidNSid.setQid(qid);
+                qidNSid.setSid(sid);
+                Series series=new Series();
+                series.setId(qidNSid);
+                Series save=seriesRepository.save(series);
+                if(save==null)
+                    result.setError("出错");
+            }
+        }
+
         return result;
     }
 
@@ -241,6 +262,24 @@ public class QuestionServiceImpl implements QuestionService{
                 result.addAll(findBinding(elem));
             }
         }
+        return result;
+    }
+
+    @Override
+    public Result getSimpleTest(Integer sid){
+        Result result=new Result("success",200,null);
+        List<Series> seriesList=seriesRepository.findByIdSid(sid);
+        List<Question> resultList=new ArrayList<>();
+        for(Series item:seriesList){
+            Integer qid = item.getId().getQid();
+            if (qid > -1) {
+                Question question = questionRepository.findByQid(qid);
+                List<Answer> answers = answerRepository.findByQid(qid);
+                question.setAnswers(answers);
+                resultList.add(question);
+            }
+        }
+        result.setResult(resultList);
         return result;
     }
 }

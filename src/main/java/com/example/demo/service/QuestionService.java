@@ -4,6 +4,7 @@ import com.example.demo.basic.NotFoundException;
 import com.example.demo.basic.Result;
 import com.example.demo.basic.UpdateFailException;
 import com.example.demo.domain.Question;
+import com.example.demo.domain.SelectSeriesReuqest;
 import com.example.demo.domain.Selected;
 import org.springframework.data.domain.Pageable;
 
@@ -42,5 +43,6 @@ public interface QuestionService {
     Result getTest(List<Selected> qidList);
 
     Result updateQuestion(Question question);
-    Result selectQuestions(List<Selected> qidList);
+    Result selectQuestions(SelectSeriesReuqest request);
+    Result getSimpleTest(Integer sid);
 }

@@ -6,22 +6,36 @@ import java.util.List;
 @Entity
 @Table(name = "question")
 public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer qid;
+   private Integer qid;
     private String question;
     private int importance;
     private int type;
     private int tag;
     @Transient
     private List<Answer> answers;
+    private String dwtype;
 
-    public void setQid(Integer qid) {
-        this.qid = qid;
+    public Question(){
+
+    }
+
+    public String getDwtype() {
+        return dwtype;
+    }
+
+    public void setDwtype(String dwtype) {
+        this.dwtype = dwtype;
     }
 
     public Integer getQid() {
         return qid;
+    }
+
+    public void setQid(Integer qid) {
+        this.qid = qid;
     }
 
     public String getQuestion() {
@@ -64,4 +78,6 @@ public class Question {
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
+
+
 }

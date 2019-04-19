@@ -1,12 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.basic.Result;
-import com.example.demo.domain.Answer;
-import com.example.demo.domain.Question;
-import com.example.demo.domain.Selected;
+import com.example.demo.domain.*;
 import com.example.demo.repository.AnswerRepository;
 import com.example.demo.repository.QuestionRepository;
 import com.example.demo.repository.SelectedRepository;
+import com.example.demo.repository.SeriesRepository;
 import com.example.demo.service.AnswerService;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,6 +29,8 @@ public class QuestionController {
     private AnswerRepository answerRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private SeriesRepository seriesRepository;
 
 
     @RequestMapping(value = "/question/addQuestion")
@@ -61,9 +63,8 @@ public class QuestionController {
      * @return
      */
     @RequestMapping(value = "/question/selectQuestions")
-    public Result selectQuestions(@RequestBody HashMap<String,List<Selected>> request){
-        List<Selected> qidList=request.get("selectList");
-        return questionService.selectQuestions(qidList);
+    public Result selectQuestions(@RequestBody SelectSeriesReuqest request){
+        return questionService.selectQuestions(request);
     }
 
     @RequestMapping(value = "/question/queryQuestionByQid")
@@ -82,16 +83,32 @@ public class QuestionController {
         return result;
     }
 
+    //自定义
     @RequestMapping(value = "/question/querySelected")
     public Result querySelected(@RequestBody HashMap<String,Integer> map){
         Integer pageNo=map.get("pageNo");
         Integer pageSize=map.get("pageSize");
-        Sort sort=new Sort(Sort.Direction.ASC, "qid");
-        Pageable pageable=new PageRequest(pageNo,pageSize,sort);
-        Page<Question> questionList=questionRepository.querySelected(pageable);
+        Integer sid=Integer.valueOf(map.get("sid"));
+//        Sort sort=new Sort(Sort.Direction.ASC, "qid");
+        Pageable pageable=new PageRequest(pageNo,pageSize);
         Result result=new Result("success",200,null);
-        result.setResult((questionList));
+        if(sid==11){
+            Page<Question> questionList=questionRepository.querySelected(pageable);
+            result.setResult((questionList));
+        }
+        else{
+            List<Series> seriesList=seriesRepository.findByIdSid(sid);
+            List<Integer> qidList=new ArrayList<>();
+            for(Series item:seriesList){
+                Integer qid=item.getId().getQid();
+                    qidList.add(qid);
+            }
+            Page<Question> questionList=questionRepository.querySeries(qidList,pageable);
+            result.setResult((questionList));
+        }
         return result;
     }
+
+
 
 }
