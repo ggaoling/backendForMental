@@ -161,7 +161,7 @@ public class TestResultServiceImpl implements TestResultService {
         Integer history =r .getHistory();
         HashMap<String,String> response=new HashMap<>();
         response.put("name",name);
-        response.put("average","30");
+        response.put("average","14");
         response.put("personal",history.toString());
         result.setResult(response);
         return result;

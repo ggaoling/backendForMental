@@ -9,5 +9,5 @@ public interface SeriesService {
 
     Series getSeries(Integer sid);
 
-    Result getAllSeries();
+    Result getAllSeries(Integer id);
 }

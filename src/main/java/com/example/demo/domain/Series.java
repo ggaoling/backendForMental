@@ -12,6 +12,7 @@ public class Series {
     private QidNSid id;
     private String name;
     private String description;
+    private String isopen;
 
 //    @EmbeddedId
     public QidNSid getId() {
@@ -36,5 +37,13 @@ public class Series {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIsopen() {
+        return isopen;
+    }
+
+    public void setIsopen(String isopen) {
+        this.isopen = isopen;
     }
 }

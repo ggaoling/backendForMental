@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 public class SeriesController {
 
@@ -19,8 +21,8 @@ public class SeriesController {
         return seriesService.addSeries(series);
     }
     @RequestMapping(value = "/series/getSeries")
-    Result getAllSeries(){
-        return seriesService.getAllSeries();
+    Result getAllSeries(@RequestBody HashMap<String,String> request){
+        return seriesService.getAllSeries(Integer.valueOf(request.get("id")));
     }
 
 }

@@ -34,14 +34,18 @@ public class SeriesServiceImpl implements SeriesService {
     }
 
     @Override
-    public Result getAllSeries() {
+    public Result getAllSeries(Integer id) {
         Result result=new Result("success",200,null);
         List<Series> seriesList=seriesRepository.findAll();
-//        for(Series item:seriesList){
-//
-//        }
         List<Series> finalList=null;
-        finalList=seriesList.stream().filter((Series item)->item.getId().getQid()==-1).collect((Collectors.toList()));
+        if(id!=1111){
+            finalList=seriesList.stream().filter((Series item)->item.getId().getQid()==-1&&item.getIsopen().equals("true")).collect((Collectors.toList()));
+        }
+        else{
+            finalList=seriesList.stream().filter((Series item)->item.getId().getQid()==-1).collect((Collectors.toList()));
+
+        }
+
         result.setResult(finalList);
         return result;
     }
