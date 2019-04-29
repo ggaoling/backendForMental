@@ -13,4 +13,7 @@ public interface SeriesRepository extends JpaRepository<Series,QidNSid> {
 
    @Query("select s.name from Series s where s.id=?1")
    String findNameById(QidNSid id);
+
+   @Query("select  s from Series s where s.id=?1")
+   Series findSeriesById(QidNSid id);
 }
