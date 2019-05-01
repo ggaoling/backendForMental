@@ -65,4 +65,11 @@ public class SeriesController {
         return new Result("success",200,null);
     }
 
+    @RequestMapping(value = "/series/getLevel")
+    public Result getLevel(@RequestBody HashMap<String,Integer> request){
+        Integer sid=request.get("sid");
+        List<Level> levelList=levelRepository.findBySid(sid);
+        return new Result("success",200,levelList);
+    }
+
 }

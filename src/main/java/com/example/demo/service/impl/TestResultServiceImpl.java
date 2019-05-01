@@ -2,10 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.basic.Result;
 import com.example.demo.domain.*;
-import com.example.demo.repository.AnswerRepository;
-import com.example.demo.repository.PresultRepository;
-import com.example.demo.repository.RestresultRepository;
-import com.example.demo.repository.SeriesRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.QuestionService;
 import com.example.demo.service.TestResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +24,8 @@ public class TestResultServiceImpl implements TestResultService {
     private RestresultRepository restresultRepository;
     @Autowired
     private SeriesRepository seriesRepository;
+    @Autowired
+    private LevelRepository levelRepository;
 
     /**
      * 普通试题计算，根据uid+sid 存history
@@ -158,8 +157,20 @@ public class TestResultServiceImpl implements TestResultService {
             result.setError("无结果");
             return result;
         }
-        Integer history =r .getHistory();
         HashMap<String,String> response=new HashMap<>();
+        List<Level> levelList=levelRepository.findBySid(sid);
+        Integer history =r .getHistory();
+        for(Integer i=0;i<levelList.size();i++){
+            Integer pre=0;
+            if(i!=0){
+                pre=levelList.get(i-1).getNum();
+            }
+            Integer next=levelList.get(i).getNum();
+            if(i==0&&history<next||history>=pre&&history<next){
+                response.put("explain",levelList.get(i).getDescription());
+                break;
+            }
+        }
         response.put("name",name);
         response.put("average","14");
         response.put("personal",history.toString());
