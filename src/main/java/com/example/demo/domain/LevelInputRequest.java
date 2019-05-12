@@ -6,6 +6,8 @@ public class LevelInputRequest {
     private List<String> num;
     private List<String> description;
     private Integer sid;
+    private Integer average;
+    private String needcount;
     public void setNum(List<String> num) {
         this.num = num;
     }
@@ -30,4 +32,19 @@ public class LevelInputRequest {
         return num;
     }
 
+    public void setAverage(Integer average) {
+        this.average = average;
+    }
+
+    public Integer getAverage() {
+        return average;
+    }
+
+    public String getNeedcount() {
+        return needcount;
+    }
+
+    public void setNeedcount(String needCount) {
+        this.needcount = needCount;
+    }
 }

@@ -13,6 +13,9 @@ public class Series {
     private String name;
     private String description;
     private String isopen;
+    private Integer average;
+    private String needcount;
+    private Integer visit;
 
 //    @EmbeddedId
     public QidNSid getId() {
@@ -45,5 +48,29 @@ public class Series {
 
     public void setIsopen(String isopen) {
         this.isopen = isopen;
+    }
+
+    public Integer getAverage() {
+        return average;
+    }
+
+    public Integer getVisit() {
+        return visit;
+    }
+
+    public String getNeedcount() {
+        return needcount;
+    }
+
+    public void setAverage(Integer average) {
+        this.average = average;
+    }
+
+    public void setNeedcount(String needcount) {
+        this.needcount = needcount;
+    }
+
+    public void setVisit(Integer visit) {
+        this.visit = visit;
     }
 }

@@ -57,6 +57,20 @@ public class TestResultServiceImpl implements TestResultService {
         obj.setId(uidNSid);
         obj.setHistory(history);
         restresultRepository.save(obj);
+        //needcount为真时修改average
+        QidNSid id=new QidNSid();
+        id.setSid(sid);
+        id.setQid(-1);
+        Series series=seriesRepository.findSeriesById(id);
+        String needcount=series.getNeedcount();
+        if(needcount.equals("true")){
+            Integer average=series.getAverage();
+            Integer visit=series.getVisit();
+            series.setVisit(visit+1);
+            average=(average*visit+history)/(visit+1);
+            series.setAverage(average);
+            seriesRepository.save(series);
+        }
         return result;
     }
 
@@ -160,6 +174,11 @@ public class TestResultServiceImpl implements TestResultService {
         HashMap<String,String> response=new HashMap<>();
         List<Level> levelList=levelRepository.findBySid(sid);
         Integer history =r .getHistory();
+        QidNSid qidNSid1=new QidNSid();
+        qidNSid.setQid(-1);
+        qidNSid.setSid(sid);
+        Series series=seriesRepository.findSeriesById(qidNSid);
+        Integer average=series.getAverage();
         for(Integer i=0;i<levelList.size();i++){
             Integer pre=0;
             if(i!=0){
@@ -172,7 +191,7 @@ public class TestResultServiceImpl implements TestResultService {
             }
         }
         response.put("name",name);
-        response.put("average","14");
+        response.put("average",average.toString());
         response.put("personal",history.toString());
         result.setResult(response);
         return result;

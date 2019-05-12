@@ -14,7 +14,7 @@ public class User {
     private String password;
     private String tel;
     private String email;
-    private Integer history;
+//    private Integer history;
     @Transient
     private String currentAuthority="user";
     @Transient
@@ -28,7 +28,7 @@ public class User {
         this.name=name;
         this.password=password;
         this.tel=tel;
-        this.history=history;
+//        this.history=history;
         this.currentAuthority=currentAuthority;
         this.status=status;
 
@@ -63,13 +63,13 @@ public class User {
         this.tel = tel;
     }
 
-    public Integer getHistory() {
-        return history;
-    }
-
-    public void setHistory(Integer history) {
-        this.history = history;
-    }
+//    public Integer getHistory() {
+//        return history;
+//    }
+//
+//    public void setHistory(Integer history) {
+//        this.history = history;
+//    }
 
     @Transient
     public String getStatus() {

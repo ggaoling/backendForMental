@@ -54,6 +54,14 @@ public class SeriesController {
         List<String> num=request.getNum();
         List<String> description=request.getDescription();
         Integer sid=request.getSid();
+        Integer average=request.getAverage();
+        String needCount=request.getNeedcount();
+        QidNSid id=new QidNSid();
+        id.setSid(sid);
+        id.setQid(-1);
+        Series series=seriesRepository.findSeriesById(id);
+        series.setAverage(average);
+        series.setNeedcount(needCount);
         List<Level> levelList=new ArrayList<>();
         for(String item:num){
             Level level=new Level();
